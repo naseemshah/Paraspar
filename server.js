@@ -19,5 +19,12 @@ app.get('/meet/:roomid',(req,res)=>{
     res.render('room.ejs',{roomid: req.params.roomid})
 });
 
+io.on('connection',(socket)=>{
+    socket.on('join-room',(roomid, userid)=>{
+        socket.join(roomid);
+        socket.to(roomid).broadcast.emit('user-connected',userid);
+    })
+
+});
 
 server.listen(3000);

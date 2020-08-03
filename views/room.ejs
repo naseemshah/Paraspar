@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Room</title>
-    <link rel="stylesheet" href="assets/css/room.css">
+    <script>
+        let room_id = '<%= roomid  %>';
+        // document.body.innerHTML += `room id from script is ${room_id}`
+    </script>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js" defer></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="../assets/js/room.js" defer></script>
+    
+    
+    <link rel="stylesheet" href="../assets/css/room.css">
 </head>
 <body>
     room.ejs
     room id : <%= roomid  %>
+    <div id="video-grid">
+
+    </div>
 </body>
 </html>
