@@ -23,6 +23,7 @@ io.on('connection',(socket)=>{
     socket.on('join-room',(roomid, userid)=>{
         socket.join(roomid);
         socket.to(roomid).broadcast.emit('user-connected',userid);
+    
     })
 
 });

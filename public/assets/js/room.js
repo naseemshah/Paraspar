@@ -8,12 +8,28 @@ let peer = new Peer(undefined,{
 let selfVideo = document.createElement('video');
 selfVideo.muted = true;
 
+const peers = {};
+
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
 }).then(stream=>{
     addVideoStream(selfVideo,stream)
+    socket.on('user-connected',userid =>{
+        console.log("User connected: ",userid)
+        connectToNewUser(userid, stream);
+    })
+    peer.on('call', call=>{
+        let video = document.createElement('video');
+        call.answer(stream);
+        call.on('stream', userVideoStream =>{
+            addVideoStream(video,userVideoStream);
+        })
+        
+    });
 })
+
+
 
 
 peer.on('open', id =>{
@@ -21,14 +37,23 @@ peer.on('open', id =>{
     
 })
 
-socket.on('user-connected',userid =>{
-    console.log("User Connected: " + userid)
-})
 
 function addVideoStream(video,stream){
     video.srcObject = stream;
     video.addEventListener('loadedmetadata',()=>{
         video.play();
     })
-    videoGrid.appendChild(video);
+    videoGrid.append(video);
+}
+
+function connectToNewUser(userid, stream){
+    let call = peer.call(userid, stream);
+    let userVideo = document.createElement('video');
+    call.on('stream', userVideoStream =>{
+        addVideoStream(userVideo,userVideoStream);
+    })
+
+    call.on('close',()=>{
+        userVideo.remove();
+    })
 }
